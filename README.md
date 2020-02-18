@@ -1,6 +1,13 @@
 # Snyverse
+Website for posting ideas, plans, philosophy texts and designs for futuristic/utopia city/country. 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.1.
+## Technologies
+* HTML
+* CSS, SCSS
+* JS, TS
+* Angular and NodeJS
+* PostgreSQL
+
 
 ## Development server
 
