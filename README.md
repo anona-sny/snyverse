@@ -6,7 +6,9 @@ Website for posting ideas, plans, philosophy texts and designs for futuristic/ut
 * CSS, SCSS
 * JS, TS
 * Angular and NodeJS
-* PostgreSQL
+* Neo4J
+* Spring
+* Java Libraries
 
 
 ## Development server
