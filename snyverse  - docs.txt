@@ -1,0 +1,15 @@
+Backend
+ - Java
+ - Spring Boot
+ - GraphQL
+ - Pipes
+ - Paging
+ 
+Frontend
+ - Node.js
+ - Angular (https://angular.io/guide/file-structure) read more, important to begin on right way
+ - Component libraries (angular material, teradata covalent) both good ones
+ 
+Mobile Frontend
+ - NativeScript
+ - Angular

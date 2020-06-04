@@ -1,4 +1,4 @@
-package cz.anona.snyverse.entities;
+package cz.anona.snyverse.entities.article;
 
 import lombok.Data;
 import org.neo4j.ogm.annotation.GeneratedValue;
@@ -7,12 +7,11 @@ import org.neo4j.ogm.annotation.NodeEntity;
 
 @NodeEntity
 @Data
-public class Post {
+public class Tag {
 
     @Id
     @GeneratedValue
     private Long id;
-    private String title;
-    private String body;
+    private String name;
 
 }

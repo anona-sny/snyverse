@@ -1,10 +1,9 @@
 package cz.anona.snyverse.entities;
 
+import cz.anona.snyverse.entities.article.Article;
 import lombok.Data;
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.*;
+
 import java.util.List;
 
 @NodeEntity
@@ -17,9 +16,9 @@ public class User {
     private String username;
     private String email;
     private String displayName;
-    private String password_hash;
+    private String password;
 
     @Relationship(type = "WRITED")
-    public List<Post> posts;
+    public List<Article> articles;
 
 }

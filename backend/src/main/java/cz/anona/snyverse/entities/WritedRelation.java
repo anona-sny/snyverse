@@ -1,5 +1,6 @@
 package cz.anona.snyverse.entities;
 
+import cz.anona.snyverse.entities.article.Article;
 import lombok.Data;
 import org.neo4j.ogm.annotation.*;
 
@@ -7,7 +8,7 @@ import java.time.OffsetDateTime;
 
 @RelationshipEntity(type = "WRITED")
 @Data
-public class WritedRel {
+public class WritedRelation {
 
     @Id
     @GeneratedValue
@@ -17,7 +18,7 @@ public class WritedRel {
     private User user;
 
     @EndNode
-    private Post post;
+    private Article article;
     private OffsetDateTime date;
 
 }
