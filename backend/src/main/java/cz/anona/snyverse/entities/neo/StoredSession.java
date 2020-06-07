@@ -1,17 +1,22 @@
-package cz.anona.snyverse.entities.article;
+package cz.anona.snyverse.entities.neo;
 
 import lombok.Data;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 
+import java.time.OffsetDateTime;
+
 @NodeEntity
 @Data
-public class Tag {
+public class StoredSession {
 
     @Id
     @GeneratedValue
     private Long id;
-    private String name;
+
+    private Long user;
+    private String session;
+    private OffsetDateTime lastAccess;
 
 }

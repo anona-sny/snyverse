@@ -1,7 +1,7 @@
 package cz.anona.snyverse.services;
 
-import cz.anona.snyverse.entities.article.Tag;
-import cz.anona.snyverse.repositories.TagRepository;
+import cz.anona.snyverse.entities.neo.article.Tag;
+import cz.anona.snyverse.repositories.neo.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TagService {
 
     @Autowired
-    private TagRepository tagRepository;
+    protected TagRepository tagRepository;
 
     public boolean existTag(String tagName) {
         return this.tagRepository.findAllByName(tagName).size()>0;

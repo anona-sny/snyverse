@@ -1,7 +1,7 @@
 package cz.anona.snyverse.services;
 
-import cz.anona.snyverse.entities.StoredSession;
-import cz.anona.snyverse.repositories.SessionRepository;
+import cz.anona.snyverse.entities.neo.StoredSession;
+import cz.anona.snyverse.repositories.neo.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +15,12 @@ import java.util.List;
 public class SessionService {
 
     @Autowired
-    private SessionRepository sessionRepository;
+    protected SessionRepository sessionRepository;
 
     @Autowired
-    private HttpSession httpSession;
+    protected HttpSession httpSession;
 
-    private final int sessionTTL = 1440; // in seconds
+    protected final int sessionTTL = 1440; // in seconds
 
     public StoredSession getSession() {
         List<StoredSession> sessions = this.sessionRepository.findAllBySession(httpSession.getId());

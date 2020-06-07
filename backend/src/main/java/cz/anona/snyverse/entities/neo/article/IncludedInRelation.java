@@ -1,4 +1,4 @@
-package cz.anona.snyverse.entities.article;
+package cz.anona.snyverse.entities.neo.article;
 
 import lombok.Data;
 import org.neo4j.ogm.annotation.*;

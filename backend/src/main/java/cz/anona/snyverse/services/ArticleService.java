@@ -1,9 +1,12 @@
 package cz.anona.snyverse.services;
 
-import cz.anona.snyverse.entities.Status;
-import cz.anona.snyverse.entities.article.Article;
-import cz.anona.snyverse.entities.article.Tag;
-import cz.anona.snyverse.repositories.ArticleRepository;
+import cz.anona.snyverse.entities.neo.state.State;
+import cz.anona.snyverse.entities.neo.article.Article;
+import cz.anona.snyverse.entities.neo.article.Tag;
+import cz.anona.snyverse.entities.neo.state.StateCode;
+import cz.anona.snyverse.repositories.neo.ArticleRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,23 +18,25 @@ import java.time.OffsetDateTime;
 public class ArticleService {
 
     @Autowired
-    private ArticleRepository articleRepository;
+    protected ArticleRepository articleRepository;
 
     @Autowired
-    private TagService tagService;
+    protected TagService tagService;
 
     @Autowired
-    private UserService userService;
+    protected UserService userService;
 
-    public Status createArticle(Article article) {
+    protected Logger logger = LoggerFactory.getLogger(ArticleService.class);
+
+    public State createArticle(Article article) {
         if(article == null) {
-            return Status.getErrorStatus("Error", "Can't create empty article");
+            return State.getStatus("Error", "Can't create empty article", StateCode.BAD_DATA);
         }
         if(article.getTitle() == null || article.getTitle().equals("")){
-            return Status.getErrorStatus("Error", "Empty title");
+            return State.getStatus("Error", "Empty title", StateCode.BAD_DATA);
         }
         if(this.userService.getUserFromSession() == null) {
-            return Status.getErrorStatus("Error", "User not logged");
+            return State.getStatus("Error", "User not logged", StateCode.NOT_LOGGED);
         }
         for (Tag tag : article.getTags()) {
             this.tagService.createTag(tag.getName());
@@ -40,8 +45,9 @@ public class ArticleService {
         article.setUpdateDate(OffsetDateTime.now());
         article.setAuthor(this.userService.getUserFromSession());
         article.setId(null);
-        this.articleRepository.save(article);
-        return Status.getSuccessStatus("Article created", "Article was successfully created");
+        Article articleSaved = this.articleRepository.save(article);
+        this.logger.info(articleSaved.toString());
+        return State.getStatus("Article created", "Article was successfully created", StateCode.CREATED);
     }
 
 }

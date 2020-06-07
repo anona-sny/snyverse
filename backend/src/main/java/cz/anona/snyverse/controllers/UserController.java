@@ -1,6 +1,7 @@
 package cz.anona.snyverse.controllers;
-import cz.anona.snyverse.entities.Status;
-import cz.anona.snyverse.entities.User;
+import cz.anona.snyverse.entities.neo.state.State;
+import cz.anona.snyverse.entities.neo.User;
+import cz.anona.snyverse.entities.neo.state.StateCode;
 import cz.anona.snyverse.services.SessionService;
 import cz.anona.snyverse.services.UserService;
 import org.slf4j.Logger;
@@ -10,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -22,24 +24,27 @@ public class UserController {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @GetMapping(path = "/users")
+    @GetMapping(path = "/all")
     public Iterable<User> getAllUsers() {
         return this.userService.getAll();
     }
 
-    @RequestMapping(path = "/user/create", method = RequestMethod.POST)
-    public Status registerUser(@RequestBody User user) {
+    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    public State registerUser(@RequestBody User user) {
         return this.userService.registerUser(user);
     }
 
-    @RequestMapping(path = "/user/login", method = RequestMethod.POST)
-    public Status loginUser(@RequestBody User user) {
-        Status status = this.userService.loginUser(user);
-        logger.warn(sessionService.getSession().toString());
-        return status;
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public State loginUser(@RequestBody User user) {
+        logger.warn(user.toString());
+        State state = this.userService.loginUser(user);
+        if(state.getStateCode() == StateCode.LOGGED) {
+            logger.info(sessionService.getSession().toString());
+        }
+        return state;
     }
 
-    @RequestMapping(path = "/user/info", method = RequestMethod.GET)
+    @RequestMapping(path = "/info", method = RequestMethod.GET)
     public String isLogged(HttpSession session) {
         if(this.sessionService.isLogged()) {
             logger.warn(this.sessionService.getSession().toString());
