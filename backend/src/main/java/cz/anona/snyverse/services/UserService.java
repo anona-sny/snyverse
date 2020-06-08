@@ -1,10 +1,15 @@
 package cz.anona.snyverse.services;
 
 import cz.anona.snyverse.entities.neo.state.State;
-import cz.anona.snyverse.entities.neo.User;
+import cz.anona.snyverse.entities.neo.user.User;
 import cz.anona.snyverse.entities.neo.state.StateCode;
+import cz.anona.snyverse.entities.neo.user.UserType;
 import cz.anona.snyverse.repositories.neo.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +27,8 @@ public class UserService {
 
     @Autowired
     protected SessionService sessionService;
+
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public Iterable<User> getAll() {
         return this.userRepository.findAll();
@@ -53,6 +60,7 @@ public class UserService {
         }
         // valid
         u.setArticles(null);
+        u.setType(UserType.UNVERIFIED);
         u.setPassword(this.generatePasswordHash(u.getPassword()));
         this.userRepository.save(u);
         state.setHeader("User created");
@@ -83,6 +91,41 @@ public class UserService {
         if(this.sessionService.isLogged())
             return this.userRepository.findById(this.sessionService.getSession().getUser()).get();
         return null;
+    }
+
+    public ResponseEntity<User>  getPublicUser(Long id) {
+        ResponseEntity<User> responseEntity;
+        if(this.userRepository.existsById(id)) {
+            User user = this.userRepository.findById(id).get();
+            User copy = new User();
+            copy.setArticles(user.getArticles());
+            copy.setDisplayName(user.getDisplayName());
+            copy.setId(user.getId());
+            copy.setUsername(user.getUsername());
+            responseEntity = new ResponseEntity<>(copy, HttpStatus.valueOf(200));
+        } else {
+            logger.error("User dont exist with id: "+ id);
+            responseEntity = new ResponseEntity<>(HttpStatus.valueOf(400));
+        }
+        return responseEntity;
+    }
+
+    public ResponseEntity<User> getPrivateUser(Long id) {
+        ResponseEntity<User> responseEntity;
+        if(this.userRepository.existsById(id)) {
+            User user = this.userRepository.findById(id).get();
+            User copy = new User();
+            copy.setArticles(user.getArticles());
+            copy.setDisplayName(user.getDisplayName());
+            copy.setId(user.getId());
+            copy.setUsername(user.getUsername());
+            copy.setEmail(user.getEmail());
+            responseEntity = new ResponseEntity<>(copy, HttpStatus.valueOf(200));
+        } else {
+            logger.error("User dont exist with id: "+ id);
+            responseEntity = new ResponseEntity<>(HttpStatus.valueOf(400));
+        }
+        return responseEntity;
     }
 
     private String generatePasswordHash(String password) {

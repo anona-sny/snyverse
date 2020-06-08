@@ -1,12 +1,14 @@
 package cz.anona.snyverse.controllers;
 import cz.anona.snyverse.entities.neo.state.State;
-import cz.anona.snyverse.entities.neo.User;
+import cz.anona.snyverse.entities.neo.user.User;
 import cz.anona.snyverse.entities.neo.state.StateCode;
 import cz.anona.snyverse.services.SessionService;
 import cz.anona.snyverse.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -45,12 +47,20 @@ public class UserController {
     }
 
     @RequestMapping(path = "/info", method = RequestMethod.GET)
-    public String isLogged(HttpSession session) {
-        if(this.sessionService.isLogged()) {
-            logger.warn(this.sessionService.getSession().toString());
-            return "Logged";
+    public boolean isLogged(HttpSession session) {
+        return this.sessionService.isLogged();
+    }
+
+    @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<User> getUser(@PathVariable Long userId) {
+        if(userId != null && userId > -1) {
+            if(this.sessionService.isLogged() && this.userService.getUserFromSession().getId().equals(userId)) {
+                return this.userService.getPrivateUser(userId);
+            } else {
+                return this.userService.getPublicUser(userId);
+            }
         } else {
-            return "User not logged";
+            return new ResponseEntity<>(HttpStatus.valueOf(404));
         }
     }
 

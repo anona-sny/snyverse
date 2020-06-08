@@ -8,10 +8,9 @@ import cz.anona.snyverse.services.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
@@ -24,13 +23,22 @@ public class ArticleController {
 
     Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
-    @RequestMapping(path = "/add")
+    @RequestMapping(path = "/add", method = RequestMethod.POST)
     public State newArticle(@RequestBody Article article) {
-        if(this.sessionService.isLogged()) {
-            return this.articleService.createArticle(article);
-        } else {
-            return State.getStatus(StateCode.NOT_LOGGED);
-        }
+        logger.info("Create article with data: "+article.toString());
+        return this.articleService.createArticle(article);
+    }
+
+    @RequestMapping(path = "/edit/{id}", method = RequestMethod.PUT)
+    public State editArticle(@RequestBody Article article, @PathVariable Long articleId) {
+        logger.info("Update article with id:"+articleId+", data: "+article.toString());
+        return this.articleService.updateArticle(article, articleId);
+    }
+
+    @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE)
+    public State deleteArticle(@PathVariable Long articleId) {
+        logger.info("Delete article with id:"+articleId);
+        return this.articleService.deleteArticle(articleId);
     }
 
 }

@@ -1,7 +1,7 @@
 package cz.anona.snyverse.services;
 
-import cz.anona.snyverse.entities.neo.StoredSession;
-import cz.anona.snyverse.repositories.neo.SessionRepository;
+import cz.anona.snyverse.entities.jpa.Session;
+import cz.anona.snyverse.repositories.jpa.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +22,8 @@ public class SessionService {
 
     protected final int sessionTTL = 1440; // in seconds
 
-    public StoredSession getSession() {
-        List<StoredSession> sessions = this.sessionRepository.findAllBySession(httpSession.getId());
+    public Session getSession() {
+        List<Session> sessions = this.sessionRepository.findAllBySession(httpSession.getId());
         if(sessions.size() > 0) {
             return sessions.get(0);
         } else {
@@ -32,8 +32,8 @@ public class SessionService {
     }
 
     public void associateSession(Long id) {
-        List<StoredSession> sessions = this.sessionRepository.findAllBySession(httpSession.getId());
-        List<StoredSession> sessions2 = this.sessionRepository.findAllByUser(id);
+        List<Session> sessions = this.sessionRepository.findAllBySession(httpSession.getId());
+        List<Session> sessions2 = this.sessionRepository.findAllByUser(id);
         if(sessions.size() > 0) {
             sessions.forEach(storedSession -> {
                 this.sessionRepository.delete(storedSession);
@@ -44,7 +44,7 @@ public class SessionService {
                 this.sessionRepository.delete(storedSession);
             });
         }
-        StoredSession storedSession = new StoredSession();
+        Session storedSession = new Session();
         storedSession.setSession(this.httpSession.getId());
         storedSession.setUser(id);
         storedSession.setLastAccess(OffsetDateTime.now());
@@ -52,7 +52,7 @@ public class SessionService {
     }
 
     public boolean isLogged() {
-        StoredSession session = this.getSession();
+        Session session = this.getSession();
 
         boolean valid = (session!=null&&session.getUser()!=null);
         valid = valid && (OffsetDateTime.now().toEpochSecond()-session.getLastAccess().toEpochSecond())<this.sessionTTL;

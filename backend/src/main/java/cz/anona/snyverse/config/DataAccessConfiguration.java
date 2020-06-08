@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Objects;
+import java.util.Properties;
 
 @Configuration
 @EnableNeo4jRepositories(basePackages = "cz.anona.snyverse.repositories.neo", transactionManagerRef = "neo4jTransactionManager")
@@ -76,7 +77,15 @@ public class DataAccessConfiguration {
     @Bean(name = "jpaTransactionManager")
     public JpaTransactionManager jpaTransactionManager(
             @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
-        return new JpaTransactionManager(entityManagerFactory);
+        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager(entityManagerFactory);
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.put("hibernate.show_sql", false);
+        hibernateProperties.put("spring.jpa.generate-ddl", true);
+        hibernateProperties.forEach((o, o2) -> {
+            logger.info(o+"__" +o2);
+        });
+        jpaTransactionManager.setJpaProperties(hibernateProperties);
+        return jpaTransactionManager;
     }
 
 }

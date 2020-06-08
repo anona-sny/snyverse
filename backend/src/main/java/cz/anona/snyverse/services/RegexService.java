@@ -9,6 +9,7 @@ public class RegexService {
     protected static final String displayNameRegex = "^[a-zA-Z0-9-_,.ěščřžýáíéúůňďťĚŠČŘŽÝÁÍÉÚŮŇĎŤ]*$";
     protected static final String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
     protected static final String passwordRegex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
+    protected static final String tagRegex = "^[a-z0-9_]$";
 
     public static boolean checkUsername(String username) {
         return username.matches(RegexService.usernameRegex);
@@ -21,6 +22,9 @@ public class RegexService {
     }
     public static boolean checkPassword(String password) {
         return password.matches(RegexService.passwordRegex);
+    }
+    public static boolean checkTag(String tagName) {
+        return tagName.matches(RegexService.tagRegex);
     }
 
 }
