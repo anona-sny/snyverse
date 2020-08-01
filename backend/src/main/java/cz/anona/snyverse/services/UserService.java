@@ -40,28 +40,28 @@ public class UserService {
             state.setHeader("User object is null");
             return state;
         }
-        List<User> existing = this.userRepository.findAllByUsername(u.getUsername());
+        List<User> existing = this.userRepository.findAllByUsername(u.getActiveData().getUsername());
         if(existing.size() > 0) {
             state.setHeader("User with username already exist");
             return state;
         }
-        if(!RegexService.checkUsername(u.getUsername())) {
+        if(!RegexService.checkUsername(u.getActiveData().getUsername())) {
             state.setHeader("Username not valid");
             return state;
-        } else if(!RegexService.checkEmail(u.getEmail())) {
+        } else if(!RegexService.checkEmail(u.getActiveData().getEmail())) {
             state.setHeader("Email not valid");
             return state;
-        } else if(!RegexService.checkDisplayName(u.getDisplayName())) {
+        } else if(!RegexService.checkDisplayName(u.getActiveData().getUsername())) {
             state.setHeader("Display name not valid");
             return state;
-        } else if(!RegexService.checkPassword(u.getPassword())) {
+        } else if(!RegexService.checkPassword(u.getActiveData().getPasswordHash())) {
             state.setHeader("Password is weak");
             return state;
         }
         // valid
         u.setArticles(null);
-        u.setType(UserType.UNVERIFIED);
-        u.setPassword(this.generatePasswordHash(u.getPassword()));
+        u.getActiveData().setType(UserType.UNVERIFIED);
+        u.getActiveData().setPasswordHash(this.generatePasswordHash(u.getActiveData().getPasswordHash()));
         this.userRepository.save(u);
         state.setHeader("User created");
         state.setBody("User is created, reload and login");
@@ -71,15 +71,15 @@ public class UserService {
 
     public State loginUser(User user) {
         State state = State.getStatus("", "", StateCode.BAD_DATA);
-        if(user == null || user.getUsername().equals("")) {
+        if(user == null || user.getActiveData().getUsername().equals("")) {
             return State.getStatus("Not logged", "User cannot be empty", StateCode.BAD_DATA);
         }
-        List<User> existing = this.userRepository.findAllByUsername(user.getUsername());
+        List<User> existing = this.userRepository.findAllByUsername(user.getActiveData().getUsername());
         if(existing.size() == 0) {
             return State.getStatus("Not logged", "User not exist", StateCode.BAD_LOGIN);
         }
         User inDb = existing.get(0);
-        if(generatePasswordHash(user.getPassword()).equals(inDb.getPassword())) {
+        if(generatePasswordHash(user.getActiveData().getPasswordHash()).equals(inDb.getActiveData().getPasswordHash())) {
             this.sessionService.associateSession(inDb.getId());
             return State.getStatus("Logged", "Logged", StateCode.LOGGED);
         } else {
@@ -99,9 +99,8 @@ public class UserService {
             User user = this.userRepository.findById(id).get();
             User copy = new User();
             copy.setArticles(user.getArticles());
-            copy.setDisplayName(user.getDisplayName());
             copy.setId(user.getId());
-            copy.setUsername(user.getUsername());
+            copy.getActiveData().setUsername(user.getActiveData().getUsername());
             responseEntity = new ResponseEntity<>(copy, HttpStatus.valueOf(200));
         } else {
             logger.error("User dont exist with id: "+ id);
@@ -116,10 +115,9 @@ public class UserService {
             User user = this.userRepository.findById(id).get();
             User copy = new User();
             copy.setArticles(user.getArticles());
-            copy.setDisplayName(user.getDisplayName());
             copy.setId(user.getId());
-            copy.setUsername(user.getUsername());
-            copy.setEmail(user.getEmail());
+            copy.getActiveData().setUsername(user.getActiveData().getUsername());
+            copy.getActiveData().setEmail(user.getActiveData().getEmail());
             responseEntity = new ResponseEntity<>(copy, HttpStatus.valueOf(200));
         } else {
             logger.error("User dont exist with id: "+ id);

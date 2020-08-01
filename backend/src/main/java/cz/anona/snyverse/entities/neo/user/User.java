@@ -14,11 +14,9 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-    private String username;
-    private String email;
-    private String displayName;
-    private String password;
-    private UserType type;
+
+    @Relationship(type = "USER_TO_USERDATA")
+    private UserHistory activeData;
 
     @Relationship(type = "WRITED")
     public List<Article> articles;

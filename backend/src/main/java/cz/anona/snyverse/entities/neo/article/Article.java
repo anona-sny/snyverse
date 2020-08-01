@@ -15,20 +15,11 @@ public class Article {
     @GeneratedValue
     private Long id;
 
-    @Required
-    private String title;
-
-    private OffsetDateTime creationDate;
-
-    private OffsetDateTime updateDate;
+    @Relationship(type = "ARTICLE_TO_ARTICLEDATA")
+    private ArticleHistory activeData;
 
     @Required
     @Relationship(type = "WRITED", direction = Relationship.INCOMING)
     private User author;
-
-    @Relationship(type = "INCLUDED_IN")
-    private List<Tag> tags;
-
-    private String body;
 
 }

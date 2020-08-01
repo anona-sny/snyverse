@@ -1,9 +1,9 @@
 package cz.anona.snyverse.services;
 
+import cz.anona.snyverse.entities.neo.article.Tag;
 import cz.anona.snyverse.entities.neo.user.User;
 import cz.anona.snyverse.entities.neo.state.State;
 import cz.anona.snyverse.entities.neo.article.Article;
-import cz.anona.snyverse.entities.neo.article.Tag;
 import cz.anona.snyverse.entities.neo.state.StateCode;
 import cz.anona.snyverse.repositories.neo.ArticleRepository;
 import org.slf4j.Logger;
@@ -24,9 +24,6 @@ public class ArticleService {
     protected ArticleRepository articleRepository;
 
     @Autowired
-    protected TagService tagService;
-
-    @Autowired
     protected UserService userService;
 
     @Autowired
@@ -38,7 +35,7 @@ public class ArticleService {
         if(article == null) {
             return State.getStatus("Error", "Can't create empty article", StateCode.BAD_DATA);
         }
-        if(article.getTitle() == null || article.getTitle().equals("")){
+        if(article.getActiveData().getHeader() == null || article.getActiveData().getHeader().equals("")){
             return State.getStatus("Error", "Empty title", StateCode.BAD_DATA);
         }
         if(!this.sessionService.isLogged()) {
@@ -47,8 +44,8 @@ public class ArticleService {
         if(!checkTags(article)) {
             return State.getStatus("Tags don't exist", "Tags don't exist", StateCode.BAD_DATA);
         }
-        article.setCreationDate(OffsetDateTime.now());
-        article.setUpdateDate(OffsetDateTime.now());
+        article.getActiveData().setCreateDate(OffsetDateTime.now());
+        article.getActiveData().setLastUpdateDate(OffsetDateTime.now());
         article.setAuthor(this.userService.getUserFromSession());
         article.setId(null);
         Article articleSaved = this.articleRepository.save(article);
@@ -59,8 +56,8 @@ public class ArticleService {
     public List<Article> getAllArticles() {
         List<Article> articles = this.articleRepository.findAll();
         for(Article article: articles) {
-            article.getAuthor().setPassword(null);
-            article.getAuthor().setEmail(null);
+            article.getAuthor().getActiveData().setPasswordHash(null);
+            article.getAuthor().getActiveData().setEmail(null);
         }
         return articles;
     }
@@ -70,8 +67,8 @@ public class ArticleService {
         User author = this.userService.getUserFromSession();
         this.articleRepository.findAll().forEach(article -> {
            if(article.getAuthor().getId() == author.getId()) {
-               article.getAuthor().setPassword(null);
-               article.getAuthor().setEmail(null);
+               article.getAuthor().getActiveData().setPasswordHash(null);
+               article.getAuthor().getActiveData().setEmail(null);
                articles.add(article);
            }
         });
@@ -82,7 +79,7 @@ public class ArticleService {
         if(article == null || articleId == null || this.articleRepository.existsById(articleId)) {
             return State.getStatus(StateCode.BAD_DATA);
         }
-        if(article.getTitle() == null || article.getTitle().equals("")) {
+        if(article.getActiveData().getHeader() == null || article.getActiveData().getHeader().equals("")) {
             return State.getStatus(StateCode.BAD_DATA);
         }
         if(!this.sessionService.isLogged()) {
@@ -95,10 +92,10 @@ public class ArticleService {
         if(checkTags(article)) {
             return State.getStatus("Tags don't exist", "Tags don't exist", StateCode.BAD_DATA);
         }
-        articleSaved.setTitle(article.getTitle());
-        articleSaved.setBody(article.getBody());
-        articleSaved.setTags(article.getTags());
-        articleSaved.setUpdateDate(OffsetDateTime.now());
+        articleSaved.getActiveData().setHeader(article.getActiveData().getHeader());
+        articleSaved.getActiveData().setBody(article.getActiveData().getBody());
+        articleSaved.getActiveData().setTags(article.getActiveData().getTags());
+        articleSaved.getActiveData().setLastUpdateDate(OffsetDateTime.now());
         return State.getStatus(StateCode.UPDATED);
     }
 
@@ -115,11 +112,7 @@ public class ArticleService {
     }
 
     private boolean checkTags(Article article) {
-        boolean check = true;
-        for(Tag tag: article.getTags()) {
-            check = check && tagService.existTag(tag.getName());
-        }
-        return check;
+        return true;
     }
 
 }
