@@ -81,9 +81,6 @@ public class DataAccessConfiguration {
         Properties hibernateProperties = new Properties();
         hibernateProperties.put("hibernate.show_sql", false);
         hibernateProperties.put("spring.jpa.generate-ddl", true);
-        hibernateProperties.forEach((o, o2) -> {
-            logger.info(o+"__" +o2);
-        });
         jpaTransactionManager.setJpaProperties(hibernateProperties);
         return jpaTransactionManager;
     }

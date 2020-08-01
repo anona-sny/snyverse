@@ -24,4 +24,3 @@ All pages, account and more are created for full anonymous purpose, you will be 
 * spam protection
 * copyright annotation
 * vulgarities acceptable only in some cases
-* 

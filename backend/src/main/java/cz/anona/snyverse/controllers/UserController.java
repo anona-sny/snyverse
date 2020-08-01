@@ -4,6 +4,7 @@ import cz.anona.snyverse.entities.neo.user.User;
 import cz.anona.snyverse.entities.neo.state.StateCode;
 import cz.anona.snyverse.services.SessionService;
 import cz.anona.snyverse.services.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +27,19 @@ public class UserController {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    @ApiOperation(	value = "List users", notes = "Check and create article or retrieve error")
     @GetMapping(path = "/all")
     public Iterable<User> getAllUsers() {
         return this.userService.getAll();
     }
 
+    @ApiOperation(	value = "Create user (registration)", notes = "Check and create article or retrieve error")
     @RequestMapping(path = "/create", method = RequestMethod.POST)
     public State registerUser(@RequestBody User user) {
         return this.userService.registerUser(user);
     }
 
+    @ApiOperation(	value = "Try login", notes = "Check and create article or retrieve error")
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public State loginUser(@RequestBody User user) {
         logger.warn(user.toString());
@@ -46,11 +50,13 @@ public class UserController {
         return state;
     }
 
+    @ApiOperation(	value = "Retrieve info about logged user", notes = "Check and create article or retrieve error")
     @RequestMapping(path = "/info", method = RequestMethod.GET)
     public boolean isLogged(HttpSession session) {
         return this.sessionService.isLogged();
     }
 
+    @ApiOperation(	value = "Get specified user", notes = "Check and create article or retrieve error")
     @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
     public ResponseEntity<User> getUser(@PathVariable Long userId) {
         if(userId != null && userId > -1) {
