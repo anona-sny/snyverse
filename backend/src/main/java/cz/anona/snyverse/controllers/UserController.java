@@ -1,4 +1,5 @@
 package cz.anona.snyverse.controllers;
+import cz.anona.snyverse.controllers.dtos.RegistrationUserDTO;
 import cz.anona.snyverse.entities.neo.state.State;
 import cz.anona.snyverse.entities.neo.user.User;
 import cz.anona.snyverse.entities.neo.state.StateCode;
@@ -27,18 +28,7 @@ public class UserController {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @ApiOperation(	value = "List users", notes = "Check and create article or retrieve error")
-    @GetMapping(path = "/all")
-    public Iterable<User> getAllUsers() {
-        return this.userService.getAll();
-    }
-
-    @ApiOperation(	value = "Create user (registration)", notes = "Check and create article or retrieve error")
-    @RequestMapping(path = "/create", method = RequestMethod.POST)
-    public State registerUser(@RequestBody User user) {
-        return this.userService.registerUser(user);
-    }
-
+    /*
     @ApiOperation(	value = "Try login", notes = "Check and create article or retrieve error")
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public State loginUser(@RequestBody User user) {
@@ -48,7 +38,7 @@ public class UserController {
             logger.info(sessionService.getSession().toString());
         }
         return state;
-    }
+    }*/
 
     @ApiOperation(	value = "Retrieve info about logged user", notes = "Check and create article or retrieve error")
     @RequestMapping(path = "/info", method = RequestMethod.GET)
@@ -68,6 +58,19 @@ public class UserController {
         } else {
             return new ResponseEntity<>(HttpStatus.valueOf(404));
         }
+    }
+
+    /////////////////////////
+    @ApiOperation(value = "Register new user")
+    @RequestMapping(path = "/register", method = RequestMethod.POST)
+    public ResponseEntity registerUser(@RequestBody RegistrationUserDTO userDTO) {
+        return this.userService.registerUser(userDTO);
+    }
+
+    @ApiOperation(	value = "List users", notes = "Check and create article or retrieve error")
+    @RequestMapping(path = "/list", method = RequestMethod.GET)
+    public ResponseEntity listUsers() {
+        return ResponseEntity.ok(this.userService.getAll());
     }
 
 }

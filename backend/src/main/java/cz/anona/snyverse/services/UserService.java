@@ -1,9 +1,12 @@
 package cz.anona.snyverse.services;
 
+import cz.anona.snyverse.controllers.dtos.RegistrationUserDTO;
 import cz.anona.snyverse.entities.neo.state.State;
 import cz.anona.snyverse.entities.neo.user.User;
 import cz.anona.snyverse.entities.neo.state.StateCode;
+import cz.anona.snyverse.entities.neo.user.UserHistory;
 import cz.anona.snyverse.entities.neo.user.UserType;
+import cz.anona.snyverse.repositories.neo.UserHistoryRepository;
 import cz.anona.snyverse.repositories.neo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -26,6 +30,9 @@ public class UserService {
     protected UserRepository userRepository;
 
     @Autowired
+    protected UserHistoryRepository userHistoryRepository;
+
+    @Autowired
     protected SessionService sessionService;
 
     Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -34,41 +41,29 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public State registerUser(User u) {
-        State state = State.getStatus("", "", StateCode.BAD_DATA);
-        if(u == null) {
-            state.setHeader("User object is null");
-            return state;
+    public ResponseEntity registerUser(RegistrationUserDTO userDTO) {
+        if(userDTO == null) {
+            return ResponseEntity.noContent().build();
         }
-        List<User> existing = this.userRepository.findAllByUsername(u.getActiveData().getUsername());
-        if(existing.size() > 0) {
-            state.setHeader("User with username already exist");
-            return state;
+        if( userDTO.getEmail() == null||
+            userDTO.getPassword() == null||
+            userDTO.getUsername() == null) {
+            return ResponseEntity.badRequest().body("Empty required data");
         }
-        if(!RegexService.checkUsername(u.getActiveData().getUsername())) {
-            state.setHeader("Username not valid");
-            return state;
-        } else if(!RegexService.checkEmail(u.getActiveData().getEmail())) {
-            state.setHeader("Email not valid");
-            return state;
-        } else if(!RegexService.checkDisplayName(u.getActiveData().getUsername())) {
-            state.setHeader("Display name not valid");
-            return state;
-        } else if(!RegexService.checkPassword(u.getActiveData().getPasswordHash())) {
-            state.setHeader("Password is weak");
-            return state;
+        if(this.userHistoryRepository.findAllByUsername(userDTO.getUsername()).size() > 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username in use");
         }
-        // valid
-        u.setArticles(null);
-        u.getActiveData().setType(UserType.UNVERIFIED);
-        u.getActiveData().setPasswordHash(this.generatePasswordHash(u.getActiveData().getPasswordHash()));
-        this.userRepository.save(u);
-        state.setHeader("User created");
-        state.setBody("User is created, reload and login");
-        state.setStateCode(StateCode.CREATED);
-        return state;
+        // konvert
+        User user = new User();
+        user.setActiveData(new UserHistory());
+        user.getActiveData().setEmail(userDTO.getEmail());
+        user.getActiveData().setPasswordHash(/*encrypt*/userDTO.getPassword());
+        user.getActiveData().setUsername(userDTO.getUsername());
+        user.getActiveData().setUser(user);
+        return ResponseEntity.ok().body(this.userRepository.save(user));
     }
 
+    /*
     public State loginUser(User user) {
         State state = State.getStatus("", "", StateCode.BAD_DATA);
         if(user == null || user.getActiveData().getUsername().equals("")) {
@@ -85,7 +80,7 @@ public class UserService {
         } else {
             return State.getStatus("Not logged", "Bad password", StateCode.BAD_LOGIN);
         }
-    }
+    }*/
 
     public User getUserFromSession() {
         if(this.sessionService.isLogged())

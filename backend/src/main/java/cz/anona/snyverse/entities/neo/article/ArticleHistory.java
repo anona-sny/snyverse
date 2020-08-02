@@ -1,7 +1,9 @@
 package cz.anona.snyverse.entities.neo.article;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import cz.anona.snyverse.entities.neo.user.User;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -12,13 +14,15 @@ import java.util.List;
 
 @NodeEntity
 @Data
+@EqualsAndHashCode(exclude="article")
 public class ArticleHistory {
 
 	@Id
 	@GeneratedValue
 	private Long id;
 
-	@Relationship(type = "ARTICLEDATA_TO_ARTICLE")
+	@Relationship(type = "ARTICLE_TO_ARTICLEDATA")
+	@JsonIgnore
 	private Article article;
 
 	private OffsetDateTime createDate;

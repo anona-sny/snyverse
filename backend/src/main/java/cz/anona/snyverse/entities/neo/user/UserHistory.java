@@ -1,7 +1,8 @@
 package cz.anona.snyverse.entities.neo.user;
 
-import cz.anona.snyverse.entities.neo.article.Article;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -12,18 +13,17 @@ import java.util.List;
 
 @NodeEntity
 @Data
+@EqualsAndHashCode(exclude="user")
 public class UserHistory {
 
 	@Id
 	@GeneratedValue
 	private Long id;
 
-	@Relationship(type = "USERDATA_TO_USER")
-	private User user;
-
 	private String username;
 	private String email;
 	private UserType type;
+	@JsonIgnore
 	private String passwordHash;
 	private String name;
 	private String surname;
@@ -37,4 +37,8 @@ public class UserHistory {
 
 	@Relationship(type = "IN_WORKS")
 	public List<Work> works;
+
+	@Relationship(type = "USERDATA_TO_USER")
+	@JsonIgnore
+	private User user;
 }

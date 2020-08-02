@@ -1,5 +1,6 @@
 package cz.anona.snyverse.entities.neo.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cz.anona.snyverse.entities.neo.article.Article;
 import lombok.Data;
 import org.neo4j.ogm.annotation.*;
