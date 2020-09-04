@@ -186,7 +186,7 @@
 											"top": 435,
 											"width": 151,
 											"height": 13,
-											"text": "-password_hash",
+											"text": "-passwordHash",
 											"horizontalAlignment": 0
 										},
 										{
@@ -254,7 +254,7 @@
 											"top": 495,
 											"width": 151,
 											"height": 13,
-											"text": "-profile_photo",
+											"text": "-profilePhoto",
 											"horizontalAlignment": 0
 										},
 										{
@@ -271,7 +271,7 @@
 											"top": 510,
 											"width": 151,
 											"height": 13,
-											"text": "-valid_from",
+											"text": "-createdDate",
 											"horizontalAlignment": 0
 										},
 										{
@@ -288,7 +288,7 @@
 											"top": 525,
 											"width": 151,
 											"height": 13,
-											"text": "-valid_to",
+											"text": "-updateDate",
 											"horizontalAlignment": 0
 										},
 										{
@@ -305,7 +305,7 @@
 											"top": 540,
 											"width": 151,
 											"height": 13,
-											"text": "-permission",
+											"text": "-type",
 											"horizontalAlignment": 0
 										},
 										{
@@ -566,7 +566,7 @@
 											"top": 375,
 											"width": 103,
 											"height": 13,
-											"text": "Work"
+											"text": "School"
 										},
 										{
 											"_type": "LabelView",
@@ -1104,7 +1104,7 @@
 											"top": 535,
 											"width": 103,
 											"height": 13,
-											"text": "Work"
+											"text": "School"
 										},
 										{
 											"_type": "LabelView",
@@ -1734,7 +1734,7 @@
 											"top": 853,
 											"width": 151,
 											"height": 13,
-											"text": "-create_date",
+											"text": "-createdDate",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1751,7 +1751,7 @@
 											"top": 868,
 											"width": 151,
 											"height": 13,
-											"text": "-update_date",
+											"text": "-updateDate",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3662,7 +3662,7 @@
 											"top": 490,
 											"width": 135,
 											"height": 13,
-											"text": "-creation_date",
+											"text": "-createdDate",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3679,7 +3679,7 @@
 											"top": 505,
 											"width": 135,
 											"height": 13,
-											"text": "-update_date",
+											"text": "-updateDate",
 											"horizontalAlignment": 0
 										}
 									],
@@ -5504,7 +5504,7 @@
 											"top": 1084,
 											"width": 111,
 											"height": 13,
-											"text": "-subcategory_of",
+											"text": "-subcategoryOf",
 											"horizontalAlignment": 0
 										}
 									],
@@ -6683,6 +6683,7 @@
 							},
 							"name": "id",
 							"visibility": "private",
+							"type": "",
 							"isReadOnly": true,
 							"isUnique": true
 						},
@@ -6694,6 +6695,7 @@
 							},
 							"name": "username",
 							"visibility": "private",
+							"type": "",
 							"isUnique": true
 						},
 						{
@@ -6704,6 +6706,7 @@
 							},
 							"name": "email",
 							"visibility": "private",
+							"type": "",
 							"isUnique": true
 						},
 						{
@@ -6712,7 +6715,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
-							"name": "password_hash",
+							"name": "passwordHash",
 							"visibility": "private"
 						},
 						{
@@ -6722,7 +6725,8 @@
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
 							"name": "name",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -6731,7 +6735,8 @@
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
 							"name": "surname",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -6740,7 +6745,8 @@
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
 							"name": "acronym",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -6748,7 +6754,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
-							"name": "profile_photo",
+							"name": "profilePhoto",
 							"visibility": "private"
 						},
 						{
@@ -6757,7 +6763,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
-							"name": "valid_from",
+							"name": "createdDate",
 							"visibility": "private"
 						},
 						{
@@ -6766,7 +6772,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
-							"name": "valid_to",
+							"name": "updateDate",
 							"visibility": "private"
 						},
 						{
@@ -6775,7 +6781,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
-							"name": "permission",
+							"name": "type",
 							"visibility": "private"
 						},
 						{
@@ -6785,7 +6791,8 @@
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
 							"name": "schools",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -6794,7 +6801,8 @@
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
 							"name": "works",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -6803,7 +6811,8 @@
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
 							"name": "articles",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -6812,7 +6821,8 @@
 								"$ref": "AAAAAAF0WigOl1Z0MWg="
 							},
 							"name": "tags",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					],
 					"operations": [
@@ -6856,7 +6866,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Work",
+					"name": "School",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -6925,7 +6935,8 @@
 								"$ref": "AAAAAAF0WiwikFcUg00="
 							},
 							"name": "id",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -6934,7 +6945,8 @@
 								"$ref": "AAAAAAF0WiwikFcUg00="
 							},
 							"name": "name",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -6943,7 +6955,8 @@
 								"$ref": "AAAAAAF0WiwikFcUg00="
 							},
 							"name": "url",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -6952,7 +6965,8 @@
 								"$ref": "AAAAAAF0WiwikFcUg00="
 							},
 							"name": "city",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -6961,7 +6975,8 @@
 								"$ref": "AAAAAAF0WiwikFcUg00="
 							},
 							"name": "country",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					]
 				},
@@ -7041,6 +7056,7 @@
 							},
 							"name": "id",
 							"visibility": "private",
+							"type": "",
 							"isReadOnly": true,
 							"isUnique": true
 						},
@@ -7050,7 +7066,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0Wi/kpF9aA44="
 							},
-							"name": "create_date",
+							"name": "createdDate",
 							"visibility": "private"
 						},
 						{
@@ -7059,7 +7075,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0Wi/kpF9aA44="
 							},
-							"name": "update_date",
+							"name": "updateDate",
 							"visibility": "private"
 						},
 						{
@@ -7069,7 +7085,8 @@
 								"$ref": "AAAAAAF0Wi/kpF9aA44="
 							},
 							"name": "category",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7078,7 +7095,8 @@
 								"$ref": "AAAAAAF0Wi/kpF9aA44="
 							},
 							"name": "header",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7087,7 +7105,8 @@
 								"$ref": "AAAAAAF0Wi/kpF9aA44="
 							},
 							"name": "body",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7157,7 +7176,8 @@
 								"$ref": "AAAAAAF0WjZHiGzBp9o="
 							},
 							"name": "id",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7166,7 +7186,8 @@
 								"$ref": "AAAAAAF0WjZHiGzBp9o="
 							},
 							"name": "name",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7175,7 +7196,8 @@
 								"$ref": "AAAAAAF0WjZHiGzBp9o="
 							},
 							"name": "author",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					]
 				},
@@ -7225,7 +7247,8 @@
 								"$ref": "AAAAAAF0WjeLKHYJK6s="
 							},
 							"name": "id",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7234,7 +7257,8 @@
 								"$ref": "AAAAAAF0WjeLKHYJK6s="
 							},
 							"name": "from",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7243,7 +7267,8 @@
 								"$ref": "AAAAAAF0WjeLKHYJK6s="
 							},
 							"name": "to",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					]
 				},
@@ -7351,7 +7376,8 @@
 								"$ref": "AAAAAAF0WjqH55HSpLc="
 							},
 							"name": "id",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7360,7 +7386,8 @@
 								"$ref": "AAAAAAF0WjqH55HSpLc="
 							},
 							"name": "type",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7369,7 +7396,8 @@
 								"$ref": "AAAAAAF0WjqH55HSpLc="
 							},
 							"name": "parent",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7378,7 +7406,8 @@
 								"$ref": "AAAAAAF0WjqH55HSpLc="
 							},
 							"name": "data",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7386,7 +7415,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0WjqH55HSpLc="
 							},
-							"name": "creation_date",
+							"name": "createdDate",
 							"visibility": "private"
 						},
 						{
@@ -7395,7 +7424,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0WjqH55HSpLc="
 							},
-							"name": "update_date",
+							"name": "updateDate",
 							"visibility": "private"
 						}
 					]
@@ -7475,7 +7504,8 @@
 								"$ref": "AAAAAAF0Wj0iWqxHVtE="
 							},
 							"name": "id",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7484,7 +7514,8 @@
 								"$ref": "AAAAAAF0Wj0iWqxHVtE="
 							},
 							"name": "type",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7493,7 +7524,8 @@
 								"$ref": "AAAAAAF0Wj0iWqxHVtE="
 							},
 							"name": "text",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7502,7 +7534,8 @@
 								"$ref": "AAAAAAF0Wj0iWqxHVtE="
 							},
 							"name": "author",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					]
 				},
@@ -7581,7 +7614,8 @@
 								"$ref": "AAAAAAF0Wj9aHtPkI0k="
 							},
 							"name": "id",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7590,7 +7624,8 @@
 								"$ref": "AAAAAAF0Wj9aHtPkI0k="
 							},
 							"name": "name",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7598,7 +7633,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF0Wj9aHtPkI0k="
 							},
-							"name": "subcategory_of",
+							"name": "subcategoryOf",
 							"visibility": "private"
 						}
 					]
@@ -7649,7 +7684,8 @@
 								"$ref": "AAAAAAF0WkGImwk1Muc="
 							},
 							"name": "id",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7658,7 +7694,8 @@
 								"$ref": "AAAAAAF0WkGImwk1Muc="
 							},
 							"name": "user",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7667,7 +7704,8 @@
 								"$ref": "AAAAAAF0WkGImwk1Muc="
 							},
 							"name": "entity",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7676,7 +7714,8 @@
 								"$ref": "AAAAAAF0WkGImwk1Muc="
 							},
 							"name": "data",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7685,7 +7724,8 @@
 								"$ref": "AAAAAAF0WkGImwk1Muc="
 							},
 							"name": "verison",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					]
 				}
