@@ -1,9 +1,10 @@
 package cz.anona.snyverse.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,13 +21,12 @@ public class ArticleEntity {
     @JoinColumn(name="category_id")
     private CategoryEntity category;
     private String header;
-    @Column(name="body", columnDefinition="CLOB NOT NULL")
-    @Lob
+    @Column(name="body", columnDefinition="JSON")
     private String body;
     @Column(name = "created_date")
-    private OffsetDateTime createdDate;
+    private Date createdDate;
     @Column(name = "update_date")
-    private OffsetDateTime updateDate;
+    private Date updateDate;
     @OneToMany(mappedBy = "article")
     private List<ArticleTagEntity> tags;
 

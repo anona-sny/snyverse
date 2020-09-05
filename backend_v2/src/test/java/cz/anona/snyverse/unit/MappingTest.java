@@ -13,28 +13,33 @@ import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-
+@SpringBootTest
 public class MappingTest {
 
-    private ArticleMapper articleMapper = Mappers.getMapper(ArticleMapper.class);
-    private TagMapper tagMapper = Mappers.getMapper(TagMapper.class);
+    @Autowired
+    private ArticleMapper articleMapper;
+
+    @Autowired
+    private TagMapper tagMapper;
 
     Logger logger = LoggerFactory.getLogger(MappingTest.class);
 
     @Test
     public void test001() throws JsonProcessingException {
-        logger.warn("zde");
+
         Assertions.assertNotNull(this.articleMapper);
 
         String testString = "test";
         Long testNumber = 1l;
-        OffsetDateTime testDate = OffsetDateTime.now();
-
+        Date testDate = Date.from(Instant.now());
         ArticleEntity entity = new ArticleEntity();
         UserEntity userEntity = new UserEntity();
         CategoryEntity categoryEntity = new CategoryEntity();
@@ -53,6 +58,7 @@ public class MappingTest {
         TagEntity t1 = new TagEntity();
         t1.setId(testNumber);
         t1.setName(testString);
+        t1.setAuthor(userEntity);
         at1.setTag(t1);
         at1.setArticle(entity);
         tags.add(at1);

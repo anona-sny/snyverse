@@ -4,7 +4,7 @@ import cz.anona.snyverse.dtos.UserWorkDTO;
 import cz.anona.snyverse.entities.UserWorkEntity;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(uses = {TagMapper.class}, componentModel = "spring")
 public interface UserWorkMapper {
 
     UserWorkDTO toDTO(UserWorkEntity entity);

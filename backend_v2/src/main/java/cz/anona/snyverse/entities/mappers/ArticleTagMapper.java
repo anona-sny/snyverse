@@ -4,7 +4,7 @@ import cz.anona.snyverse.dtos.ArticleTagDTO;
 import cz.anona.snyverse.entities.ArticleTagEntity;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(uses = {TagMapper.class}, componentModel = "spring")
 public interface ArticleTagMapper {
 
     ArticleTagDTO toDTO(ArticleTagEntity entity);

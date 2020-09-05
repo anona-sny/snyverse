@@ -10,7 +10,6 @@ public class TagDTO {
 
     private Long id;
     private String name;
-    @JsonBackReference
-    private UserDTO author;
+    private Long author;
 
 }

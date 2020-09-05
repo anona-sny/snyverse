@@ -13,3 +13,7 @@ Frontend
 Mobile Frontend
  - NativeScript
  - Angular
+
+
+
+https://stackoverflow.com/questions/1939229/how-to-create-background-process-in-spring-webapp/38313294

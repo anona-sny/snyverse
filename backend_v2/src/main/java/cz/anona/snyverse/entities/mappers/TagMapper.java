@@ -7,11 +7,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TagMapper {
 
-    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "author", source = "tagEntity.author.id")
     TagDTO toDTO(TagEntity tagEntity);
+    @Mapping(target = "author.id", source = "tagDTO.author")
     TagEntity toEntity(TagDTO tagDTO);
 
 }

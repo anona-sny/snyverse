@@ -4,7 +4,7 @@ import cz.anona.snyverse.dtos.SchoolDTO;
 import cz.anona.snyverse.entities.SchoolEntity;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SchoolMapper {
 
     SchoolDTO toDTO(SchoolEntity schoolEntity);

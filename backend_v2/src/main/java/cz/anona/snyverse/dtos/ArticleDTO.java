@@ -1,8 +1,9 @@
 package cz.anona.snyverse.dtos;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.sql.Date;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -14,8 +15,10 @@ public class ArticleDTO {
     private CategoryDTO category;
     private String header;
     private String body;
-    private OffsetDateTime createdDate;
-    private OffsetDateTime updateDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private Date createdDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private Date updateDate;
     private List<ArticleTagDTO> tags;
 
 }

@@ -4,7 +4,7 @@ import cz.anona.snyverse.entities.enums.UserType;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,7 +16,7 @@ public class UserEntity {
     private Long id;
     @Column(nullable = false, unique = true)
     private String username;
-    @Column(name = "password_hash")
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
     @Column(nullable = false, unique = true)
     private String email;
@@ -26,9 +26,9 @@ public class UserEntity {
     @Column(name = "profile_photo")
     private String profilePhoto;
     @Column(name = "created_date")
-    private OffsetDateTime createdDate;
+    private Date createdDate;
     @Column(name = "update_date")
-    private OffsetDateTime updateDate;
+    private Date updateDate;
     private UserType type;
     // rels
     @OneToMany(mappedBy = "user")

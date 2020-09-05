@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @ApiOperation(value = "testing method", notes = "return operating system of pc")
+    @ApiOperation(value = "testing method", notes = "return region")
     @RequestMapping(path = "/test", method = RequestMethod.GET)
     public String testRunningState() {
-        return System.getProperty("os");
+        return System.getProperty("user.timezone");
     }
 
 }

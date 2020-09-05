@@ -4,7 +4,7 @@ import cz.anona.snyverse.dtos.WorkDTO;
 import cz.anona.snyverse.entities.WorkEntity;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface WorkMapper {
 
     WorkEntity toEntity(WorkDTO workDTO);

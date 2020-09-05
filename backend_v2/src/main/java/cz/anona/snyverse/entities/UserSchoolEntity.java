@@ -3,7 +3,7 @@ package cz.anona.snyverse.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
+import java.util.Date;
 
 @Entity
 @Data
@@ -19,9 +19,9 @@ public class UserSchoolEntity {
     @JoinColumn(name = "school_id")
     private SchoolEntity school;
     @Column(name = "studied_from")
-    private OffsetDateTime studiedFrom;
+    private Date studiedFrom;
     @Column(name = "studied_to")
-    private OffsetDateTime studiedTo;
+    private Date studiedTo;
     // enum na granted diploma
 
 }

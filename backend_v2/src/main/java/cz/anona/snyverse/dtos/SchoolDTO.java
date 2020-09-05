@@ -11,7 +11,5 @@ public class SchoolDTO {
     private String url;
     private String city;
     private String country;
-    private OffsetDateTime studiedFrom;
-    private OffsetDateTime studiedTo;
 
 }

@@ -6,7 +6,7 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
     CategoryDTO toDTO(CategoryEntity categoryEntity, @Context CycleAvoidingMappingContext context);

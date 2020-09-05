@@ -3,7 +3,7 @@ package cz.anona.snyverse.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
+import java.util.Date;
 
 @Entity
 @Data
@@ -19,8 +19,8 @@ public class UserWorkEntity {
     @JoinColumn(name = "work_id")
     private WorkEntity work;
     @Column(name = "worked_from")
-    private OffsetDateTime workedFrom;
+    private Date workedFrom;
     @Column(name = "worked_to")
-    private OffsetDateTime workedTo;
+    private Date workedTo;
 
 }

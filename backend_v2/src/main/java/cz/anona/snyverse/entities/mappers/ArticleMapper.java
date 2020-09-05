@@ -6,7 +6,7 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(uses = {TagMapper.class}, componentModel = "spring")
 public interface ArticleMapper {
 
     ArticleDTO toDTO(ArticleEntity articleEntity, @Context CycleAvoidingMappingContext context);
