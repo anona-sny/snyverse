@@ -71,7 +71,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "snyverse:build"
+            "browserTarget": "snyverse:build",
+            "port": 5566
           },
           "configurations": {
             "production": {

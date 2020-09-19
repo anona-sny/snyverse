@@ -1,5 +1,6 @@
 package cz.anona.snyverse.services;
 
+import cz.anona.snyverse.dtos.UserDTO;
 import cz.anona.snyverse.dtos.UserLoginDTO;
 import cz.anona.snyverse.dtos.UserRegistrationDTO;
 import cz.anona.snyverse.entities.UserEntity;
@@ -9,10 +10,12 @@ import cz.anona.snyverse.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -34,15 +37,17 @@ public class UserService {
 
     Logger logger = LoggerFactory.getLogger(UserService.class);
 
+    @EventListener(ApplicationReadyEvent.class)
     public void createAdmin() {
-        if(this.userRepository.existsById(1l) || this.userRepository.findByUsername("anona") != null) {
+        if(this.userRepository.existsById(1L) || this.userRepository.findByUsername("anona") != null) {
             logger.info("Admin already exist");
         } else {
             UserEntity admin = new UserEntity();
             admin.setUsername("anona");
             admin.setType(UserType.ADMIN);
             admin.setEmail("frantisekzavazal@seznam.cz");
-            admin.setPasswordHash(cryptoService.generatePasswordHash("f1a2n3d4a5A"));
+            admin.setPasswordHash("478dc6df9cbb2225452428dd5fd06ad75efbde43ff99159afe712ffcf6d57" +
+                    "ca88dcf1c9c37f58e94cba545eeed88a07bf0e2ba88c0a15f15a0ed2e3dd44ecded");
             this.userRepository.save(admin);
             logger.info("Admin created");
         }
@@ -59,12 +64,15 @@ public class UserService {
                 return responseService.generateResponse(ResponseService.BADREQUEST, "Bad username");
             }
         } else {
+            if (userLoginDTO.getEmail() == null) {
+                return responseService.generateResponse(ResponseService.BADREQUEST, "Email and username is empty");
+            }
             user = this.userRepository.findByEmail(userLoginDTO.getEmail());
             if(user == null) {
                 return responseService.generateResponse(ResponseService.BADREQUEST, "Bad email");
             }
         }
-        if(this.cryptoService.generatePasswordHash(userLoginDTO.getPassword()).equals(user.getPasswordHash())) {
+        if(userLoginDTO.getPassword() != null && this.cryptoService.generatePasswordHash(userLoginDTO.getPassword()).equals(user.getPasswordHash())) {
             this.sessionService.associateSession(user.getId());
             return this.responseService.generateResponse(ResponseService.OKREQUEST, "Logged");
         }
@@ -102,9 +110,22 @@ public class UserService {
         }
     }
 
+    public ResponseEntity<String> updateUser(UserDTO user) {
+        if(user == null) {
+            return responseService.generateResponse(ResponseService.BADREQUEST, "No object");
+        }
+        UserEntity userEntity = this.userRepository.getOne(user.getId());
+        // TODO checking user entity before save
+        return null;
+    }
+
     public ResponseEntity<String> logout() {
         this.sessionService.dissociateSession(this.sessionService.getSession().getUserId());
         return this.responseService.generateResponse(ResponseService.OKREQUEST, "Logoff");
     }
 
+    public UserEntity returnLoggedUser() {
+        Optional<UserEntity> userO = this.userRepository.findById(this.sessionService.getSession().getUserId());
+        return userO.orElse(null);
+    }
 }

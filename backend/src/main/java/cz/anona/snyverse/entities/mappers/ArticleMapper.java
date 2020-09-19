@@ -4,7 +4,6 @@ import cz.anona.snyverse.dtos.ArticleDTO;
 import cz.anona.snyverse.entities.ArticleEntity;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(uses = {TagMapper.class}, componentModel = "spring")
 public interface ArticleMapper {

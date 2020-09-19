@@ -1,0 +1,40 @@
+{
+  "page": [
+    {
+      "type": "layout",
+      "subType": "coll-3",
+      "styles": [],
+      "children": {
+        "coll-1": [],
+        "coll-2": [],
+        "coll-3": []
+      }
+    },
+    {
+      "type": "image",
+      "styles": [],
+      "id": "ID465f46sd454fs64f65df65s4"
+    }
+  ],
+  "media": [
+    {
+      "name": "string",
+      "id": "ID465f46sd454fs64f65df65s4",
+      "styles": []
+    }
+  ],
+  "sources": [
+    {
+      "name": "string",
+      "url": "string",
+      "styles": []
+    }
+  ],
+  "relatives": [
+    {
+      "name": "string",
+      "id": "long",
+      "styles": []
+    }
+  ]
+}

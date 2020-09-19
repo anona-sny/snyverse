@@ -4,7 +4,8 @@ import cz.anona.snyverse.dtos.TagDTO;
 import cz.anona.snyverse.entities.TagEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+
+import java.util.List;
 
 
 @Mapper(componentModel = "spring")
@@ -15,4 +16,6 @@ public interface TagMapper {
     @Mapping(target = "author.id", source = "tagDTO.author")
     TagEntity toEntity(TagDTO tagDTO);
 
+    List<TagEntity> toListEntity(List<TagDTO> tagDTOList);
+    List<TagDTO> toListDTO(List<TagEntity> tagEntityList);
 }
