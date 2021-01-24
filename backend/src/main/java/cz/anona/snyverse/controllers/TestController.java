@@ -1,19 +1,17 @@
 package cz.anona.snyverse.controllers;
 
-import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin
+import java.time.OffsetDateTime;
+
 @RestController
 public class TestController {
 
-    @ApiOperation(value = "testing method", notes = "return region")
-    @RequestMapping(path = "/test", method = RequestMethod.GET)
-    public String testRunningState() {
-        return System.getProperty("user.timezone");
+    @RequestMapping(path = "/test")
+    public ResponseEntity<Object> testConnection() {
+        return ResponseEntity.accepted().body(OffsetDateTime.now());
     }
 
 }

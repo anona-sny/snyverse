@@ -1,131 +1,87 @@
 package cz.anona.snyverse.services;
 
-import cz.anona.snyverse.dtos.UserDTO;
-import cz.anona.snyverse.dtos.UserLoginDTO;
-import cz.anona.snyverse.dtos.UserRegistrationDTO;
+import cz.anona.snyverse.controllers.dtos.UserRegisterDTO;
 import cz.anona.snyverse.entities.UserEntity;
+import cz.anona.snyverse.entities.UserLoginEntity;
+import cz.anona.snyverse.entities.UserSettingsEntity;
+import cz.anona.snyverse.entities.enums.UserExceptionType;
 import cz.anona.snyverse.entities.enums.UserType;
-import cz.anona.snyverse.entities.mappers.UserMapper;
+import cz.anona.snyverse.entities.exceptions.UserException;
+import cz.anona.snyverse.repositories.UserLoginRepository;
 import cz.anona.snyverse.repositories.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserLoginRepository userLoginRepository;
+    private final CryptoService cryptoService;
+    private final LanguageCountryService languageCountryService;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private CryptoService cryptoService;
-
-    @Autowired
-    private ResponseService responseService;
-
-    @Autowired
-    private SessionService sessionService;
-
-    Logger logger = LoggerFactory.getLogger(UserService.class);
-
-    @EventListener(ApplicationReadyEvent.class)
-    public void createAdmin() {
-        if(this.userRepository.existsById(1L) || this.userRepository.findByUsername("anona") != null) {
-            logger.info("Admin already exist");
-        } else {
-            UserEntity admin = new UserEntity();
-            admin.setUsername("anona");
-            admin.setType(UserType.ADMIN);
-            admin.setEmail("frantisekzavazal@seznam.cz");
-            admin.setPasswordHash("478dc6df9cbb2225452428dd5fd06ad75efbde43ff99159afe712ffcf6d57" +
-                    "ca88dcf1c9c37f58e94cba545eeed88a07bf0e2ba88c0a15f15a0ed2e3dd44ecded");
-            this.userRepository.save(admin);
-            logger.info("Admin created");
-        }
+    public UserService(UserRepository u1, UserLoginRepository u2, CryptoService c1, LanguageCountryService l1) {
+        this.userRepository = u1;
+        this.userLoginRepository = u2;
+        this.cryptoService = c1;
+        this.languageCountryService = l1;
     }
 
-    public ResponseEntity<String> login(UserLoginDTO userLoginDTO) {
-        if(userLoginDTO == null) {
-            return responseService.generateResponse(ResponseService.BADREQUEST, "No object");
-        }
-        UserEntity user;
-        if(userLoginDTO.getUsername() != null) {
-            user = this.userRepository.findByUsername(userLoginDTO.getUsername());
-            if(user == null) {
-                return responseService.generateResponse(ResponseService.BADREQUEST, "Bad username");
-            }
-        } else {
-            if (userLoginDTO.getEmail() == null) {
-                return responseService.generateResponse(ResponseService.BADREQUEST, "Email and username is empty");
-            }
-            user = this.userRepository.findByEmail(userLoginDTO.getEmail());
-            if(user == null) {
-                return responseService.generateResponse(ResponseService.BADREQUEST, "Bad email");
-            }
-        }
-        if(userLoginDTO.getPassword() != null && this.cryptoService.generatePasswordHash(userLoginDTO.getPassword()).equals(user.getPasswordHash())) {
-            this.sessionService.associateSession(user.getId());
-            return this.responseService.generateResponse(ResponseService.OKREQUEST, "Logged");
-        }
-        return responseService.generateResponse(ResponseService.BADREQUEST, "Bad password");
+    public UserEntity getUserByUsername(String username) {
+        return this.userLoginRepository.getByUsername(username).getUser();
     }
 
-    public ResponseEntity<String> register(UserRegistrationDTO userRegistrationDTO) {
-        if(userRegistrationDTO == null) {
-            return responseService.generateResponse(ResponseService.BADREQUEST, "No object");
+    @Transactional
+    public void createUser(UserRegisterDTO userRegisterDTO) throws UserException {
+        // regex username, password, email and name check
+        if(userRegisterDTO.getUsername()==null||!RegexService.checkUsername(userRegisterDTO.getUsername())) {
+            throw new UserException(UserExceptionType.USERNAME_INVALID, "Username not match to regex");
         }
-        if(!RegexService.checkUsername(userRegistrationDTO.getUsername())) {
-            return responseService.generateResponse(ResponseService.BADREQUEST, "Bad username");
+        if(userRegisterDTO.getPassword()==null||!RegexService.checkPassword(userRegisterDTO.getPassword())) {
+            throw new UserException(UserExceptionType.PASSWORD_INVALID, "Password not match to regex");
         }
-        if(!RegexService.checkPassword(userRegistrationDTO.getPassword())) {
-            return responseService.generateResponse(ResponseService.BADREQUEST, "Bad password");
+        if(userRegisterDTO.getEmail()==null||!RegexService.checkEmail(userRegisterDTO.getEmail())) {
+            throw new UserException(UserExceptionType.USERNAME_INVALID, "Email not match to regex");
         }
-        if(!RegexService.checkEmail(userRegistrationDTO.getEmail())) {
-            return responseService.generateResponse(ResponseService.BADREQUEST, "Bad email");
+        if(userRegisterDTO.getName()==null||!RegexService.checkDisplayName(userRegisterDTO.getName())) {
+            throw new UserException(UserExceptionType.NAME_INVALID, "Name not match to regex");
         }
-        // neexistuje email nebo username?
-        if(this.userRepository.findByEmail(userRegistrationDTO.getEmail()) != null) {
-            return responseService.generateResponse(ResponseService.BADREQUEST, "Email exist");
+        // username and email check
+        if(this.userLoginRepository.getByUsername(userRegisterDTO.getUsername()) != null) {
+            throw new UserException(UserExceptionType.USERNAME_OCCUPIED, "Username already exist");
         }
-        if(this.userRepository.findByUsername(userRegistrationDTO.getUsername()) != null) {
-            return responseService.generateResponse(ResponseService.BADREQUEST, "Username exist");
+        if(this.userLoginRepository.getByEmail(userRegisterDTO.getEmail()) != null) {
+            throw new UserException(UserExceptionType.USERNAME_OCCUPIED, "Email already exist");
         }
-        UserEntity userEntity = this.userMapper.toEntityFromRegistration(userRegistrationDTO);
-        userEntity.setPasswordHash(this.cryptoService.generatePasswordHash(userRegistrationDTO.getPassword()));
-        UserEntity savedUser = this.userRepository.save(userEntity);
-        if(savedUser.getId() != null) {
-            return responseService.generateResponse(ResponseService.CREATED, "Registered");
-        } else {
-            return responseService.generateResponse(ResponseService.FATALERROR, "Fatal error on server, " +
-                    "admin will be notified");
+        // check country and language
+        if(userRegisterDTO.getCountryCode() == null ||
+                this.languageCountryService.getCountry(userRegisterDTO.getCountryCode()) == null) {
+            throw new UserException(UserExceptionType.COUNTRY_INVALID, "Country code doesn't exist");
         }
+        if(userRegisterDTO.getLanguageCode() == null ||
+                this.languageCountryService.getLanguage(userRegisterDTO.getLanguageCode()) == null) {
+            throw new UserException(UserExceptionType.LANGUAGE_INVALID, "Language code doesn't exist");
+        }
+        //create and save user
+        UserEntity newUser = new UserEntity();                                                                          // main user
+        newUser.setName(userRegisterDTO.getName());
+        newUser.setCountry(this.languageCountryService.getCountry(userRegisterDTO.getCountryCode()));
+        newUser.setLanguage(this.languageCountryService.getLanguage(userRegisterDTO.getLanguageCode()));
+        newUser.setType(UserType.USER);
+        UserLoginEntity newUserLogin = new UserLoginEntity();                                                           // login of account
+        newUserLogin.setUsername(userRegisterDTO.getUsername());
+        newUserLogin.setPasswordHash(this.cryptoService.generatePasswordHash(userRegisterDTO.getPassword()));
+        newUserLogin.setEmail(userRegisterDTO.getEmail());
+        newUserLogin.setUser(newUser);
+        newUser.setLoginEntity(newUserLogin);
+        UserSettingsEntity userSettingsEntity = new UserSettingsEntity();                                               // settings of account
+        userSettingsEntity.setSchema("default");
+        userSettingsEntity.setFontSize(12);
+        userSettingsEntity.setUser(newUser);
+        newUser.setSettingsEntity(userSettingsEntity);
+        this.userRepository.save(newUser);
     }
 
-    public ResponseEntity<String> updateUser(UserDTO user) {
-        if(user == null) {
-            return responseService.generateResponse(ResponseService.BADREQUEST, "No object");
-        }
-        UserEntity userEntity = this.userRepository.getOne(user.getId());
-        // TODO checking user entity before save
-        return null;
-    }
-
-    public ResponseEntity<String> logout() {
-        this.sessionService.dissociateSession(this.sessionService.getSession().getUserId());
-        return this.responseService.generateResponse(ResponseService.OKREQUEST, "Logoff");
-    }
-
-    public UserEntity returnLoggedUser() {
-        Optional<UserEntity> userO = this.userRepository.findById(this.sessionService.getSession().getUserId());
-        return userO.orElse(null);
-    }
 }

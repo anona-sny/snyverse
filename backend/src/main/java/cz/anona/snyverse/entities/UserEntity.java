@@ -1,41 +1,55 @@
 package cz.anona.snyverse.entities;
 
+import cz.anona.snyverse.entities.enums.CountryCode;
+import cz.anona.snyverse.entities.enums.LanguageCode;
 import cz.anona.snyverse.entities.enums.UserType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
+@Table(name = "user_entity")
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(nullable = false, unique = true)
-    private String username;
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
-    @Column(nullable = false, unique = true)
-    private String email;
-    private String name;
-    private String surname;
-    private String acronym;
-    @Column(name = "profile_photo")
-    private String profilePhoto;
-    @Column(name = "created_date")
-    private Date createdDate;
-    @Column(name = "update_date")
-    private Date updateDate;
-    private UserType type;
-    // rels
-    @OneToMany(mappedBy = "user")
-    private List<UserSchoolEntity> schools;
-    @OneToMany(mappedBy = "user")
-    private List<UserWorkEntity> works;
-    @OneToMany(mappedBy = "user")
-    private List<ArticleEntity> articles;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
+	@SequenceGenerator(name = "user_seq_gen", sequenceName = "user_id_seq", allocationSize = 1)
+	private Long id;
+
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private UserType type;
+
+	@Column(nullable = false)
+	private String name;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private CountryCode country;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private LanguageCode language;
+
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private UserLoginEntity loginEntity;
+
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private UserSettingsEntity settingsEntity;
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<UserCompanyEntity> companyEntities;
+
+	@OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<ArticleEntity> articleEntities;
+
+	@OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<ArticleDataEntity> articleDataEntities;
 
 }

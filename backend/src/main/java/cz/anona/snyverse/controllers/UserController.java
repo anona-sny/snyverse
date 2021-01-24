@@ -1,33 +1,29 @@
 package cz.anona.snyverse.controllers;
 
-import cz.anona.snyverse.dtos.UserDTO;
-import cz.anona.snyverse.dtos.UserLoginDTO;
-import cz.anona.snyverse.dtos.UserRegistrationDTO;
-import cz.anona.snyverse.services.ResponseService;
+import cz.anona.snyverse.controllers.dtos.StatusDTO;
+import cz.anona.snyverse.controllers.dtos.UserRegisterDTO;
+import cz.anona.snyverse.entities.UserEntity;
+import cz.anona.snyverse.entities.enums.StatusType;
+import cz.anona.snyverse.entities.exceptions.UserException;
 import cz.anona.snyverse.services.SessionService;
 import cz.anona.snyverse.services.UserService;
-import cz.anona.snyverse.services.guards.OperationGuard;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final SessionService sessionService;
+    private final UserService userService;
 
     @Autowired
-    private SessionService sessionService;
-
-    @Autowired
-    private OperationGuard guard;
-
-    @Autowired
-    private ResponseService responseService;
+    public UserController(SessionService s1, UserService u1) {
+        this.sessionService = s1;
+        this.userService = u1;
+    }
 
     @RequestMapping(path = "/isLogged", method = RequestMethod.GET)
     public ResponseEntity<String> isLogged() {
@@ -38,28 +34,27 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Registering new user", notes = "Registering user by inputted data in form")
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<String> createUser(@RequestBody UserRegistrationDTO user) {
-        return this.userService.register(user);
-    }
-    @RequestMapping(value = "/update/{userId}", method = RequestMethod.POST)
-    public ResponseEntity<String> updateUser(@PathVariable Long userId, @RequestBody UserDTO user) {
-        if (!this.guard.checkingPermissionUser(userId)) {
-            return this.responseService.generateResponse(ResponseService.NOTAUTHORIZED, "not authorized");
-        }
-        user.setId(userId);
-        return this.userService.updateUser(user);
+    @RequestMapping(path = "/login")
+    public ResponseEntity<Object> login() {
+        return  ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<String> loginUser(@RequestBody UserLoginDTO user) {
-        return this.userService.login(user);
+    /**
+     * Create new user if is valid, set him default settings
+     * else throw Exception
+     * @param userRegisterDTO
+     * @return
+     */
+    @RequestMapping(path = "/register")
+    public ResponseEntity<StatusDTO> register(@RequestBody UserRegisterDTO userRegisterDTO) throws UserException {
+        this.userService.createUser(userRegisterDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                StatusDTO.builder().result(StatusType.CREATED).message("User was successfully registered").build());
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.DELETE)
-    public ResponseEntity<String> logoutUser() {
-        return this.userService.logout();
+    @ExceptionHandler({ UserException.class })
+    public ResponseEntity<Object> handleException(UserException exception) {
+        return ResponseEntity.status(500).body(exception.getData());
     }
 
 }

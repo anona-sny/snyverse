@@ -1,32 +1,36 @@
 package cz.anona.snyverse.entities;
 
+import cz.anona.snyverse.entities.enums.LanguageCode;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+import java.time.OffsetDateTime;
 
+@Table(name = "article_entity")
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ArticleEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private UserEntity user;
-    @ManyToOne
-    @JoinColumn(name="category_id")
-    private CategoryEntity category;
-    private String header;
-    @Column(name="body", columnDefinition="JSON")
-    private String body;
-    @Column(name = "created_date")
-    private Date createdDate;
-    @Column(name = "update_date")
-    private Date updateDate;
-    @OneToMany(mappedBy = "article")
-    private List<ArticleTagEntity> tags;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_seq_gen")
+	@SequenceGenerator(name = "article_seq_gen", sequenceName = "article_id_gen", allocationSize = 1)
+	private Long id;
+
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name="author_id")
+	private UserEntity author;
+
+	@Column
+	private OffsetDateTime creationDate;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private LanguageCode language;
+
+
 
 }
