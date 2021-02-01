@@ -2,6 +2,7 @@ package cz.anona.snyverse.entities;
 
 import cz.anona.snyverse.entities.enums.CountryCode;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Table(name = "company_entity")
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompanyEntity {
@@ -25,5 +27,8 @@ public class CompanyEntity {
 	@Column(nullable = false)
 	private CountryCode country;
 
+	public static CompanyEntity of(String name, CountryCode code) {
+		return CompanyEntity.builder().name(name).country(code).build();
+	}
 
 }

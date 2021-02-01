@@ -10,5 +10,8 @@ public enum UserExceptionType {
     COMPANY_INVALID,
     NAME_INVALID,
     LANGUAGE_INVALID,
-    COUNTRY_INVALID
+    COUNTRY_INVALID,
+    USER_DOESNT_EXIST,
+    INVALID_CREDENTIALS,     // for login
+    OTHER
 }

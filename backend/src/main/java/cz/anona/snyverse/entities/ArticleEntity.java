@@ -1,6 +1,7 @@
 package cz.anona.snyverse.entities;
 
 import cz.anona.snyverse.entities.enums.LanguageCode;
+import cz.anona.snyverse.entities.enums.VisibilityType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class ArticleEntity {
 	@Enumerated(EnumType.STRING)
 	private LanguageCode language;
 
-
+	@Column(nullable = false)
+	private VisibilityType visibility;
 
 }

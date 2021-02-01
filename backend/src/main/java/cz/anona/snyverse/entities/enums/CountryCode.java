@@ -10,5 +10,12 @@ public enum CountryCode {
 	DEU,
 	GBR,
 	RUS,
+	USA,
+	CHN,
+	DNK,
+	FRA,
+	NLD,
+	FIN,
+	SWE
 	//...all
 }

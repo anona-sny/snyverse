@@ -1,11 +1,11 @@
-package cz.anona.snyverse.entities.exceptions;
+package cz.anona.snyverse.dtos;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class FrontendExceptionObject {
+public class ExceptionDTO {
 
     private String type;
     private String message;

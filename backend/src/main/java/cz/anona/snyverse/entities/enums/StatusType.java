@@ -4,5 +4,7 @@ public enum StatusType {
     CREATED,
     CHANGED,
     DELETED,
+    LOGGED,
+    LOGGED_OUT,
     ERROR
 }

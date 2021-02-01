@@ -3,6 +3,7 @@ package cz.anona.snyverse.entities;
 import cz.anona.snyverse.entities.enums.CountryCode;
 import cz.anona.snyverse.entities.enums.LanguageCode;
 import cz.anona.snyverse.entities.enums.UserType;
+import cz.anona.snyverse.entities.enums.VisibilityType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,10 @@ public class UserEntity {
 
 	@Column(nullable = false)
 	private String name;
+
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private VisibilityType visibility;
 
 	@Column
 	@Enumerated(EnumType.STRING)

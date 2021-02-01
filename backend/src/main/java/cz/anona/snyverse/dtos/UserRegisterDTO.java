@@ -1,4 +1,4 @@
-package cz.anona.snyverse.controllers.dtos;
+package cz.anona.snyverse.dtos;
 
 import lombok.Data;
 

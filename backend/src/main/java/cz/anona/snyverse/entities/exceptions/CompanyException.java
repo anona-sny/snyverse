@@ -1,22 +1,22 @@
 package cz.anona.snyverse.entities.exceptions;
 
 import cz.anona.snyverse.dtos.ExceptionDTO;
-import cz.anona.snyverse.entities.enums.UserExceptionType;
+import cz.anona.snyverse.entities.enums.CompanyExceptionType;
 import lombok.Getter;
 
 @Getter
-public class UserException extends Exception implements FrontendException {
+public class CompanyException extends Exception implements FrontendException {
 
-    private final UserExceptionType type;
+    private CompanyExceptionType type;
 
-    public UserException(UserExceptionType type, String description) {
-        super(description);
+    public CompanyException(CompanyExceptionType type, String message) {
+        super(message);
         this.type = type;
     }
+
 
     @Override
     public ExceptionDTO getData() {
         return ExceptionDTO.builder().message(this.getMessage()).type(this.getType().name()).build();
     }
-
 }

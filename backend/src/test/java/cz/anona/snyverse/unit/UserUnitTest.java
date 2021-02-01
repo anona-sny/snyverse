@@ -1,6 +1,5 @@
 package cz.anona.snyverse.unit;
 
-import cz.anona.snyverse.entities.UserEntity;
 import cz.anona.snyverse.entities.UserLoginEntity;
 import cz.anona.snyverse.repositories.UserLoginRepository;
 import cz.anona.snyverse.repositories.UserRepository;
@@ -31,8 +30,10 @@ public class UserUnitTest {
 
     @Test
     public void testGetUserByInvalidUsername() {
-        UserLoginEntity admin = this.userLoginRepository.getByUsername("administd457fg54dfg8d5sfg5sdfrator");
+        UserLoginEntity admin = this.userLoginRepository.getByUsername("sdf4gv65d4v654d654v4sad56f4g6v54d");
         Assertions.assertNull(admin);
     }
+
+
 
 }

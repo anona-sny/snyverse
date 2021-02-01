@@ -1,4 +1,4 @@
-package cz.anona.snyverse.controllers.dtos;
+package cz.anona.snyverse.dtos;
 
 import cz.anona.snyverse.entities.enums.StatusType;
 import lombok.Builder;
