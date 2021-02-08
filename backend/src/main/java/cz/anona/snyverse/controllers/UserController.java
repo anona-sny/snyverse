@@ -77,7 +77,7 @@ public class UserController {
 
     @ExceptionHandler({ UserException.class })
     public ResponseEntity<Object> handleException(UserException exception) {
-        return ResponseEntity.status(500).body(exception.getData());
+        return ResponseEntity.status(400).body(exception.getData());
     }
 
     @ExceptionHandler({ Exception.class })

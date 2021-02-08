@@ -29,4 +29,8 @@ public class TagService {
         return this.tagRepository.findAll();
     }
 
+    public TagEntity getTagById(Long id) {
+        return this.tagRepository.findById(id).orElse(null);
+    }
+
 }

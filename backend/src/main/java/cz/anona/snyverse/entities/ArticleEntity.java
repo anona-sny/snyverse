@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Table(name = "article_entity")
 @Entity
@@ -34,5 +35,8 @@ public class ArticleEntity {
 
 	@Column(nullable = false)
 	private VisibilityType visibility;
+
+	@OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<ArticleDataEntity> articleDataEntities;
 
 }
